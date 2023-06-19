@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable,Logger } from '@nestjs/common';
 import * as ExcelJS from 'exceljs';
 
 @Injectable()
 export class ExcelReader {
-  FILEPATH = './data/companyData.xlsx';
+  private readonly logger = new Logger(ExcelReader.name);
+  FILEPATH = process.env.EXCEL_INPUTFILE_PATH;
   async readFile(): Promise<any[]> {
+    try{
+    this.logger.log('Started reading files');
     const workbook = new ExcelJS.Workbook();
     await workbook.xlsx.readFile(this.FILEPATH);
 
@@ -21,8 +24,11 @@ export class ExcelReader {
       }
 
       data.push(rowData);
+      this.logger.log('Excel file read successfully.');
     }
-
     return data;
+  } catch (error){
+    this.logger.error('Error while reading Excel file:', error);
+  }
   }
 }

@@ -7,9 +7,11 @@ import { EmailValidatorService } from './excel/emailValidator.service';
 import { ExtractCompanyNameService } from './excel/extractCompanyName.service';
 import { ExcelController } from './excel/excel.controller'
 import { ExcelService } from './excel/excel.service';
+import { ConfigModule } from '@nestjs/config';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports: [],
+  imports: [HttpModule ,ConfigModule.forRoot()],
   controllers: [AppController,ExcelController],
   providers: [AppService,ExcelReader,ExcelWriter,EmailValidatorService,ExtractCompanyNameService,ExcelService],
 })

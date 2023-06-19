@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable,Logger } from '@nestjs/common';
 import { EmailValidatorService } from './emailValidator.service';
 
 @Injectable()
 export class ExtractCompanyNameService {
+  private readonly logger = new Logger(ExtractCompanyNameService.name);
   constructor(private readonly emailValidatorService: EmailValidatorService) {}
    
   async findCompanyNames(rows: any[]): Promise<void> {
@@ -16,9 +17,16 @@ export class ExtractCompanyNameService {
           if (validEmail) {
             const companyName = this.getCompanyNameFromEmail(email);
             row['Company name'] = companyName;
+            this.logger.log(`Company name found: ${companyName}`);
           }
+          else {
+            this.logger.warn(`Invalid email: ${email}`);
+          }
+        } else {
+          this.logger.warn(`Phone number and email are the same: ${phoneNumber}`);
         }
         }
+    
       }
   }
 

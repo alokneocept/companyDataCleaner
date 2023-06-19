@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable,Logger } from '@nestjs/common';
 import * as ExcelJS from 'exceljs';
 
 @Injectable()
 export class ExcelWriter { 
-   FILEPATH = './data/newCompanyData.xlsx';
-  async writeFile(_FILEPATH: any, data: any[]): Promise<void> {
+  private readonly logger = new Logger(ExcelWriter.name);
+   FILEPATH = process.env.EXCEL_OUTPUTFILE_PATH;
+  async writeFile(FILEPATH, data: any[]): Promise<void> {
+ try{
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet('Sheet 1');
 
@@ -19,5 +21,10 @@ export class ExcelWriter {
       sheet.addRow(values);
     }
     await workbook.xlsx.writeFile(this.FILEPATH);
+    this.logger.log('File successfully written to ${this.FILEPATH}');
+  } catch (error) {
+    this.logger.error("Error while writing file", error);
+
   }
 }
+  }
