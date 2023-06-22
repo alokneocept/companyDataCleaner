@@ -11,7 +11,7 @@ import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports: [HttpModule ,ConfigModule.forRoot()],
+  imports: [HttpModule ,ConfigModule.forRoot({isGlobal: true,})],
   controllers: [AppController,ExcelController],
   providers: [AppService,ExcelReader,ExcelWriter,EmailValidatorService,ExtractCompanyNameService,ExcelService],
 })

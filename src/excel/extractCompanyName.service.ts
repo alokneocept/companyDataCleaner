@@ -7,6 +7,9 @@ export class ExtractCompanyNameService {
   constructor(private readonly emailValidatorService: EmailValidatorService) {}
    
   async findCompanyNames(rows: any[]): Promise<void> {
+    if (!Array.isArray(rows)) {
+      throw new Error('data must be an array.');
+    } 
     for (const row of rows) {
       if (!row['Company name']) {
         const email = row['Email'];

@@ -4,7 +4,7 @@ import * as ExcelJS from 'exceljs';
 @Injectable()
 export class ExcelReader {
   private readonly logger = new Logger(ExcelReader.name);
-  FILEPATH = process.env.EXCEL_INPUTFILE_PATH;
+  FILEPATH = './data/companyData.xlsx';
   async readFile(): Promise<any[]> {
     try{
     this.logger.log('Started reading files');

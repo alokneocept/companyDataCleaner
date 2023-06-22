@@ -4,8 +4,8 @@ import * as ExcelJS from 'exceljs';
 @Injectable()
 export class ExcelWriter { 
   private readonly logger = new Logger(ExcelWriter.name);
-   FILEPATH = process.env.EXCEL_OUTPUTFILE_PATH;
-  async writeFile(FILEPATH, data: any[]): Promise<void> {
+   FILEPATH = './data/newCompanyData.xlsx';
+  async writeFile(data: any[]): Promise<void> {
  try{
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet('Sheet 1');
