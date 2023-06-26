@@ -1,16 +1,18 @@
-import { Controller, Get,Logger } from '@nestjs/common';
+import { Controller, Get, Logger } from '@nestjs/common';
 import { ExcelService } from './excel.service';
 @Controller('excel')
 export class ExcelController {
-  private readonly logger = new Logger(ExcelController.name);
+  private readonly log = new Logger(ExcelController.name);
   constructor(private readonly excelService: ExcelService) {}
 
-  @Get()
+  @Get('showexcel')
   async generateExcel(): Promise<void> {
     try {
-      await this.excelService.showExcel();
+      const sheetData = await this.excelService.showExcel();
+      return sheetData;
     } catch (error) {
-      this.logger.error('Error occurred while processing the Excel file:', error);
+      this.log.error('Error occurred while uploading the Excel file.');
+      throw new error('Failed to load data.');
     }
   }
 }

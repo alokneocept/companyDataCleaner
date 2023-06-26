@@ -3,7 +3,7 @@ import axios from 'axios';
 
 jest.mock('axios');
 
-describe('email validator', () => {
+describe('Email validator', () => {
   let emailValidatorService: EmailValidatorService;
 
   beforeEach(() => {
@@ -14,24 +14,30 @@ describe('email validator', () => {
     jest.resetAllMocks();
   });
 
-  it('return true for a valid email', async () => {
+  it('Return true for a valid email', async () => {
     const email = 'alokrai@neocepts.com';
-   /* axios.get.mockResolvedValueOnce('valid domain'); */
+    const mockResponse = {
+      response: {
+        valid: true,
+      },
+    };
+    axios.get.mockResolvedValueOnce(mockResponse);
     const isValid = await emailValidatorService.validateEmail(email);
     expect(isValid).toBe(true);
     expect(axios.get).toHaveBeenCalledWith('https://neocepts.com');
   });
 
-  it('return false for an ignored email', async () => {
+  it('Return false for an ignored email', async () => {
     const email = 'alokrai@gmail.com';
     const isValid = await emailValidatorService.validateEmail(email);
     expect(isValid).toBe(false);
     expect(axios.get).not.toHaveBeenCalled();
   });
 
-  it('return false for an invalid email domain', async () => {
+  it('Return false for an invalid email domain', async () => {
     const email = 'alok@rai.com';
-   /* axios.get.mockRejectedValueOnce(new Error('Invalid domain')); */
+    const mockedError = new Error('Invalid email');
+    axios.get.mockRejectedValueOnce(mockedError);
     const isValid = await emailValidatorService.validateEmail(email);
     expect(isValid).toBe(false);
     expect(axios.get).toHaveBeenCalledWith('https://rai.com');

@@ -13,16 +13,20 @@ describe('ExcelWriter', () => {
     addWorksheetMock = jest.fn().mockReturnThis();
     addRowMock = jest.fn().mockReturnThis();
 
-    jest.spyOn(ExcelJS.Workbook.prototype.xlsx, 'writeFile').mockImplementation(writeFileMock);
-    jest.spyOn(ExcelJS.Workbook.prototype, 'addWorksheet').mockImplementation(addWorksheetMock);
-  /*  jest.spyOn(ExcelJS.Worksheet.prototype, 'addRow').mockImplementation(addRowMock); */
-  }); 
+    jest
+      .spyOn(ExcelJS.Workbook.prototype.xlsx, 'writeFile')
+      .mockImplementation(writeFileMock);
+    jest
+      .spyOn(ExcelJS.Workbook.prototype, 'addWorksheet')
+      .mockImplementation(addWorksheetMock);
+    /*  jest.spyOn(ExcelJS.Worksheet.prototype, 'addRow').mockImplementation(addRowMock); */
+  });
 
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
-  it('should write file with provided data', async () => {
+  it('Should write file with provided data', async () => {
     const data = [
       { companyName: 'neocepts', email: 'alok@neocepts.com' },
       { companyName: 'shauryam', email: 'alok@shauryam.co.in' },
@@ -33,7 +37,7 @@ describe('ExcelWriter', () => {
     expect(writeFileMock).toHaveBeenCalledWith(excelWriter.FILEPATH);
   });
 
-  it('should create worksheet with correct name', async () => {
+  it('Should create worksheet with correct name', async () => {
     const data = [
       { companyName: 'neocepts', email: 'alok@neocepts.com' },
       { companyName: 'shauryam', email: 'pawan@shauryam.co.in' },
@@ -44,7 +48,7 @@ describe('ExcelWriter', () => {
     expect(addWorksheetMock).toHaveBeenCalledWith('Sheet 1');
   });
 
-  it('should add headers to the worksheet', async () => {
+  it('Should add headers to the worksheet', async () => {
     const data = [
       { companyName: 'neocepts', email: 'alok@neocepts.com' },
       { companyName: 'shauryam', email: 'pawan@shauryam.co.in' },
@@ -55,7 +59,7 @@ describe('ExcelWriter', () => {
     expect(addRowMock).toHaveBeenCalledWith(['companyName', 'email']);
   });
 
-  it('should add rows with correct values to the worksheet', async () => {
+  it('Should add rows with correct values to the worksheet', async () => {
     const data = [
       { companyName: 'neocepts', email: 'alok@neocepts.com' },
       { companyName: 'shauryam', email: 'pawan@shauryam.co.in' },
@@ -64,11 +68,17 @@ describe('ExcelWriter', () => {
     await excelWriter.writeFile(data);
 
     expect(addRowMock).toHaveBeenCalledTimes(data.length + 1);
-    expect(addRowMock).toHaveBeenNthCalledWith(2, ['neocepts', 'alok@neocepts.com']);
-    expect(addRowMock).toHaveBeenNthCalledWith(2, ['shauryam', 'pawan@shauryam.co.in']);
+    expect(addRowMock).toHaveBeenNthCalledWith(2, [
+      'neocepts',
+      'alok@neocepts.com',
+    ]);
+    expect(addRowMock).toHaveBeenNthCalledWith(2, [
+      'shauryam',
+      'pawan@shauryam.co.in',
+    ]);
   });
 
-  it('should handle empty data', async () => {
+  it('Should handle empty data', async () => {
     const data: any[] = [];
 
     await excelWriter.writeFile(data);
