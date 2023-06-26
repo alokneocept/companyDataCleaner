@@ -1,22 +1,18 @@
-
-import { Controller, Get } from '@nestjs/common';
-import { ExcelReader } from './excelReder.service';
-import { ExcelWriter } from './excelWriter.service';
-import { ExtractCompanyNameService } from './extractCompanyName.service';
-
+import { Controller, Get, Logger } from '@nestjs/common';
+import { ExcelService } from './excel.service';
 @Controller('excel')
 export class ExcelController {
-  constructor(
-    private readonly excelReader: ExcelReader,
-    private readonly excelWriter: ExcelWriter,
-    private readonly extractCompanyNameService: ExtractCompanyNameService,
-  ) {}
+  private readonly log = new Logger(ExcelController.name);
+  constructor(private readonly excelService: ExcelService) {}
 
   @Get('showexcel')
-  async showExcel(): Promise<any> {
-    const excelData = await this.excelReader.readFile();
-    await this.extractCompanyNameService.findCompanyNames(excelData);
-    await this.excelWriter.writeFile(process.env.EXCEL_OUTPUTFILE_PATH, excelData);
-    return excelData;
+  async generateExcel(): Promise<void> {
+    try {
+      const sheetData = await this.excelService.showExcel();
+      return sheetData;
+    } catch (error) {
+      this.log.error('Error occurred while uploading the Excel file.');
+      throw new error('Failed to load data.');
+    }
   }
 }
